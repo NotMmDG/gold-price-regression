@@ -1,0 +1,25 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Local packages
+pkgs/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Matplotlib cache
+.config/
