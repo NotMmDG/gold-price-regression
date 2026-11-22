@@ -13,19 +13,25 @@ import sys
 import argparse
 from typing import Tuple, Dict, Any
 
-# Ensure workspace packages or installed packages are accessible
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PARENT_PKGS = os.path.join(os.path.dirname(SCRIPT_DIR), "pkgs")
-LOCAL_PKGS = os.path.join(SCRIPT_DIR, "pkgs")
-
-for pkg_path in [LOCAL_PKGS, PARENT_PKGS]:
-    if os.path.exists(pkg_path) and pkg_path not in sys.path:
-        sys.path.insert(0, pkg_path)
-
+# Ensure headless matplotlib config
 os.environ.setdefault("MPLCONFIGDIR", "/tmp")
 
-import numpy as np
-import pandas as pd
+# Try standard imports first; fallback to local pkgs only for compatible Python 3.12
+try:
+    import numpy as np
+    import pandas as pd
+except ImportError:
+    if sys.version_info[:2] == (3, 12):
+        SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+        PARENT_PKGS = os.path.join(os.path.dirname(SCRIPT_DIR), "pkgs")
+        LOCAL_PKGS = os.path.join(SCRIPT_DIR, "pkgs")
+        for pkg_path in [LOCAL_PKGS, PARENT_PKGS]:
+            if os.path.exists(pkg_path) and pkg_path not in sys.path:
+                sys.path.insert(0, pkg_path)
+        import numpy as np
+        import pandas as pd
+    else:
+        raise
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from sklearn.linear_model import LinearRegression, Ridge, RidgeCV
@@ -357,3 +363,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
